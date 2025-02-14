@@ -66,8 +66,9 @@ object GameState {
     }
 
     fun getBossQuestions(): List<Question> {
-        return List(3) { DataRepository.getRandomQuestion(selectedTheme, "Difficile") }
+        return bossQuestionList.shuffled().take(3)
     }
+
 
     /**
      * Génère les questions pour chaque nœud en fonction de la difficulté assignée et du thème sélectionné.

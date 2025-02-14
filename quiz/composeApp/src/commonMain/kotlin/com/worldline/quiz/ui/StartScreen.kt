@@ -24,7 +24,7 @@ fun StartScreen(onStartGame: () -> Unit) {
     }
 
     var selectedTheme by remember { mutableStateOf(GameState.selectedTheme) } // Synchronisé avec GameState
-    val themes = listOf("Star Wars", "Lost Ark", "Counter Strike")
+    val themes = listOf("Star Wars", "Général", "Géographie")
 
     Box(
         modifier = Modifier
