@@ -31,14 +31,12 @@ fun VictoryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                // Fond identique à la MapScreen
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFF222831), Color(0xFF393E46))
                 )
             )
             .padding(24.dp)
     ) {
-        // Compteurs en haut à gauche avec les emojis
         Column(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -53,13 +51,12 @@ fun VictoryScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Text(
                 text = "🎭 ${GameState.collectedJokers.size}",
-                fontSize = 22.sp,  // taille augmentée
+                fontSize = 22.sp, 
                 fontWeight = FontWeight.Medium,
                 color = Color.White
             )
         }
 
-        // Starfield en fond pour une ambiance cosmique
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -74,22 +71,20 @@ fun VictoryScreen(
             }
         }
 
-        // Titre et fenêtre du Joker débloqué, encore plus bas et centré
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                // On descend davantage le contenu
                 .padding(top = 180.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Félicitations !",
-                fontSize = 28.sp,  // taille réduite par rapport à l'original
+                fontSize = 28.sp, 
                 fontWeight = FontWeight.ExtraBold,
                 color = Color(0xFFFFD700)
             )
-            Spacer(modifier = Modifier.height(80.dp)) // espace supplémentaire avant la fenêtre du Joker
+            Spacer(modifier = Modifier.height(80.dp)) 
             if (newJoker != null) {
                 Card(
                     backgroundColor = Color(0xFF222222),
@@ -110,7 +105,6 @@ fun VictoryScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        // Emoji du nouveau Joker avec une taille augmentée
                         Text(
                             text = JokerManager.getJokerEmoji(newJoker),
                             fontSize = 40.sp,
@@ -122,7 +116,6 @@ fun VictoryScreen(
             }
         }
 
-        // Boutons en bas de l'écran (sans emoji dans les libellés)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
