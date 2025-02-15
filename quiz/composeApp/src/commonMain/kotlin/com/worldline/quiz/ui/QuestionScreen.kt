@@ -28,12 +28,11 @@ import com.worldline.quiz.data.Question
 import kotlin.math.hypot
 import kotlin.random.Random
 
-// Fonction qui retourne un emoji pour le mini-boss selon la difficulté de la node actuelle
 fun miniBossEmojiForDifficulty(difficulty: String): String {
     return when (difficulty) {
         "Facile" -> "🦄"
         "Moyenne" -> "👾"
-        else -> "🐉" // Difficile
+        else -> "🐉"
     }
 }
 
@@ -48,21 +47,19 @@ fun QuestionScreen(
     var selectedAnswer by remember { mutableStateOf<Int?>(null) }
     var showJokerDialog by remember { mutableStateOf(false) }
     var selectedJoker by remember { mutableStateOf<JokerType?>(null) }
-    // Simulation d'un mini-boss avec 1 HP (une bonne réponse le vainc)
     var miniBossHp by remember { mutableStateOf(1) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                // Fond dégradé sombre
+              
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFF222831), Color(0xFF393E46))
                 )
             )
             .padding(16.dp)
     ) {
-        // Compteur de streak en haut à gauche
         Text(
             text = "🚀 ${GameState.streakCount}",
             fontSize = 18.sp,
@@ -71,8 +68,6 @@ fun QuestionScreen(
                 .align(Alignment.TopStart)
                 .padding(8.dp)
         )
-
-        // Starfield en fond
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -87,7 +82,6 @@ fun QuestionScreen(
             }
         }
 
-        // Mini-boss simulation en haut, centré horizontalement, avec un padding top de 120dp
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,7 +106,6 @@ fun QuestionScreen(
             )
         }
 
-        // Contenu principal déplacé plus bas (padding top de 300dp)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -120,7 +113,6 @@ fun QuestionScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Disponibilité des jokers, placés juste en dessous de la simulation du boss
             if (GameState.collectedJokers.isNotEmpty()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -129,7 +121,7 @@ fun QuestionScreen(
                     GameState.collectedJokers.forEach { joker ->
                         Text(
                             text = JokerManager.getJokerEmoji(joker),
-                            fontSize = 40.sp, // Taille un peu plus petite que l'emoji du boss
+                            fontSize = 40.sp, 
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
                                 .clickable {
@@ -143,7 +135,6 @@ fun QuestionScreen(
             }
             Spacer(modifier = Modifier.height(15.dp))
 
-            // Question
             Text(
                 text = question.text,
                 color = Color.White,
@@ -151,7 +142,6 @@ fun QuestionScreen(
                 fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            // Boutons de réponse
             question.answers.forEach { answer ->
                 if (!answer.hidden) {
                     Button(
@@ -173,7 +163,6 @@ fun QuestionScreen(
                     }
                 }
             }
-            // Bouton Valider
             Button(
                 onClick = {
                     if (selectedAnswer == question.correctAnswerId) {
@@ -202,7 +191,6 @@ fun QuestionScreen(
         }
     }
 
-    // Fenêtre de dialogue pour confirmer l'utilisation d'un Joker
     if (showJokerDialog && selectedJoker != null) {
         AlertDialog(
             onDismissRequest = { showJokerDialog = false },
