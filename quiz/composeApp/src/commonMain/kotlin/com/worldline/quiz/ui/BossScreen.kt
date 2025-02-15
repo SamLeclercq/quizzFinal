@@ -40,7 +40,6 @@ fun BossScreen(
     var selectedAnswer by remember { mutableStateOf<Int?>(null) }
     var showJokerDialog by remember { mutableStateOf(false) }
     var selectedJoker by remember { mutableStateOf<JokerType?>(null) }
-    // Boss HP sur 3 points
     var bossHp by remember { mutableStateOf(3) }
 
     Box(
@@ -53,7 +52,6 @@ fun BossScreen(
             )
             .padding(16.dp)
     ) {
-        // Compteur de streak en haut à gauche
         Text(
             text = "🚀 ${GameState.streakCount}",
             fontSize = 20.sp,
@@ -63,7 +61,6 @@ fun BossScreen(
                 .padding(8.dp)
         )
 
-        // Starfield en fond
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -78,7 +75,6 @@ fun BossScreen(
             }
         }
 
-        // Disposition principale dans une Column centrée verticalement
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -86,18 +82,15 @@ fun BossScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Mini-boss simulation
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Emoji fixe pour le boss (ici "👹")
                 Text(
                     text = "👹",
                     fontSize = 64.sp,
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                // Barre d'HP du boss sur 3 points
                 LinearProgressIndicator(
                     progress = bossHp / 3f,
                     modifier = Modifier
@@ -109,27 +102,7 @@ fun BossScreen(
             }
 
 
-            // Section question et réponses (remontée)// Disponibilité des jokers, placés juste en dessous de la simulation du boss
-            //            if (GameState.collectedJokers.isNotEmpty()) {
-            //                Row(
-            //                    modifier = Modifier.fillMaxWidth(),
-            //                    horizontalArrangement = Arrangement.Center
-            //                ) {
-            //                    GameState.collectedJokers.forEach { joker ->
-            //                        Text(
-            //                            text = JokerManager.getJokerEmoji(joker),
-            //                            fontSize = 40.sp, // Taille un peu plus petite que l'emoji du boss
-            //                            modifier = Modifier
-            //                                .padding(horizontal = 8.dp)
-            //                                .clickable {
-            //                                    selectedJoker = joker
-            //                                    showJokerDialog = true
-            //                                },
-            //                            color = Color.White
-            //                        )
-            //                    }
-            //                }
-            //            }
+       
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,7 +118,7 @@ fun BossScreen(
                                         GameState.collectedJokers.forEach { joker ->
                                             Text(
                                                 text = JokerManager.getJokerEmoji(joker),
-                                                fontSize = 40.sp, // Taille un peu plus petite que l'emoji du boss
+                                                fontSize = 40.sp, 
                                                 modifier = Modifier
                                                     .padding(horizontal = 8.dp)
                                                     .clickable {
@@ -158,7 +131,6 @@ fun BossScreen(
                                     }
                                 }
                 Spacer(modifier = Modifier.height(15.dp))
-                // Question du boss
                 Text(
                     text = bossQuestion.text,
                     fontSize = 22.sp,
@@ -166,7 +138,6 @@ fun BossScreen(
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                // Boutons de réponse
                 bossQuestion.answers.forEach { answer ->
                     if (!answer.hidden) {
                         Button(
@@ -188,7 +159,6 @@ fun BossScreen(
                         }
                     }
                 }
-                // Bouton Valider
                 Button(
                     onClick = {
                         if (selectedAnswer == bossQuestion.correctAnswerId) {
@@ -232,7 +202,6 @@ fun BossScreen(
         }
     }
 
-    // Fenêtre de dialogue pour confirmer l'utilisation d'un Joker
     if (showJokerDialog && selectedJoker != null) {
         AlertDialog(
             onDismissRequest = { showJokerDialog = false },
