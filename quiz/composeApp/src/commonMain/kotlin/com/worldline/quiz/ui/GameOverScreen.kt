@@ -26,14 +26,12 @@ fun GameOverScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            // Fond dégradé dans le même esprit que le jeu
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFF222831), Color(0xFF393E46))
                 )
             )
     ) {
-        // Starfield subtil en arrière-plan
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -48,7 +46,6 @@ fun GameOverScreen(
             }
         }
 
-        // Contenu principal centré
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
