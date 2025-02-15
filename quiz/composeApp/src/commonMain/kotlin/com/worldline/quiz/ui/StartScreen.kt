@@ -23,7 +23,7 @@ fun StartScreen(onStartGame: () -> Unit) {
         List(starCount) { Pair(Random.nextFloat(), Random.nextFloat()) }
     }
 
-    var selectedTheme by remember { mutableStateOf(GameState.selectedTheme) } // Synchronisé avec GameState
+    var selectedTheme by remember { mutableStateOf(GameState.selectedTheme) } 
     val themes = listOf("Star Wars", "Général", "Géographie")
 
     Box(
@@ -35,7 +35,6 @@ fun StartScreen(onStartGame: () -> Unit) {
                 )
             )
     ) {
-        // Starfield en arrière-plan
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -48,7 +47,6 @@ fun StartScreen(onStartGame: () -> Unit) {
             }
         }
 
-        // Titre du jeu
         Text(
             text = "🚀",
             fontSize = 80.sp,
@@ -57,7 +55,6 @@ fun StartScreen(onStartGame: () -> Unit) {
                 .padding(top = 150.dp)
         )
 
-        // Encadré des règles
         Card(
             backgroundColor = Color(0xFF1E1E1E),
             shape = RoundedCornerShape(12.dp),
@@ -88,7 +85,6 @@ fun StartScreen(onStartGame: () -> Unit) {
             }
         }
 
-        // Sélection du thème au-dessus du bouton "Commencer"
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -110,7 +106,7 @@ fun StartScreen(onStartGame: () -> Unit) {
                     Button(
                         onClick = {
                             selectedTheme = theme
-                            GameState.setTheme(theme) // Met à jour le thème dans GameState
+                            GameState.setTheme(theme) 
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = if (selectedTheme == theme) Color(0xFF1A73E8) else Color(0xFF333333)
@@ -124,10 +120,9 @@ fun StartScreen(onStartGame: () -> Unit) {
             }
         }
 
-        // Bouton "Commencer"
         Button(
             onClick = {
-                GameState.setTheme(selectedTheme) // Applique le thème avant de commencer
+                GameState.setTheme(selectedTheme) 
                 onStartGame()
             },
             modifier = Modifier
