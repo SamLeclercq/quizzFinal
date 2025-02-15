@@ -34,13 +34,11 @@ fun MapScreen(
     val positions = naturalNodePositions()
     val edges = naturalEdges()
 
-    // ★ 1) Génération des étoiles
     val starCount = 60
     val starPositions = remember {
         List(starCount) { Pair(Random.nextFloat(), Random.nextFloat()) }
     }
 
-    // ★ 2) Génération de nébuleuses colorées
     val nebulaCount = 4
     val nebulaData = remember {
         List(nebulaCount) {
@@ -54,14 +52,12 @@ fun MapScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            // Fond dégradé vertical
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color(0xFF222831), Color(0xFF393E46))
                 )
             )
     ) {
-        // Barre d'infos en haut à gauche (streak et jokers en colonne)
         Column(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -81,12 +77,10 @@ fun MapScreen(
             )
         }
 
-        // ★ 3) Dessin du décor (nébuleuses + étoiles)
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
 
-            // Nébuleuses
             nebulaData.forEach { (rx, ry, rad) ->
                 drawCircle(
                     color = randomNebulaColor().copy(alpha = 0.2f),
@@ -94,7 +88,6 @@ fun MapScreen(
                     radius = rad
                 )
             }
-            // Étoiles
             starPositions.forEach { (sx, sy) ->
                 drawCircle(
                     color = Color.White.copy(alpha = 0.5f),
@@ -104,17 +97,14 @@ fun MapScreen(
             }
         }
 
-        // ★ 4) Dessin de la carte (lignes + nœuds)
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(nodeStates) {
                     detectTapGestures { tapOffset ->
-                        // Récupérer le dernier nœud SELECTED
                         val currentNode = nodeStates.lastIndexOf(NodeState.SELECTED)
 
                         if (currentNode == -1) {
-                            // Aucun nœud sélectionné : clic sur n'importe quel AVAILABLE
                             for (nodeId in nodeStates.indices) {
                                 if (nodeStates[nodeId] == NodeState.AVAILABLE) {
                                     val (x, y) = positions[nodeId]
@@ -127,7 +117,6 @@ fun MapScreen(
                                 }
                             }
                         } else {
-                            // Un nœud SELECTED existe : clic uniquement sur ses voisins
                             val connectedNodes = edges
                                 .filter { it.first == currentNode }
                                 .map { it.second }
@@ -151,7 +140,6 @@ fun MapScreen(
             val w = size.width
             val h = size.height
 
-            // 4.1) Dessiner les liaisons (lignes courbes)
             edges.forEach { (start, end) ->
                 val (sx, sy) = positions[start]
                 val (ex, ey) = positions[end]
@@ -182,7 +170,6 @@ fun MapScreen(
                 )
             }
 
-            // 4.2) Dessiner les nœuds
             for (nodeId in nodeStates.indices) {
                 val (x, y) = positions[nodeId]
                 val nodeState = nodeStates[nodeId]
@@ -190,7 +177,6 @@ fun MapScreen(
                 val center = Offset(x * w, y * h)
 
                 if (isBoss) {
-                    // Le boss : on dessine une étoile rouge
                     val bossColor = when (nodeState) {
                         NodeState.LOCKED    -> Color.Red.copy(alpha = 0.5f)
                         NodeState.AVAILABLE -> Color.Red
@@ -204,7 +190,6 @@ fun MapScreen(
                         points = 5,
                         color = bossColor
                     )
-                    // Éventuel contour plus épais
                     drawStar(
                         center = center,
                         outerRadius = 25f,
@@ -214,10 +199,8 @@ fun MapScreen(
                         style = Stroke(width = 4f)
                     )
                 } else {
-                    // Nœud classique : on prend la difficulté + l'état pour colorer
                     val (color1, color2) = colorsForNode(nodeId, nodeState)
 
-                    // Dégradé radial
                     drawCircle(
                         brush = Brush.radialGradient(
                             colors = listOf(color1, color2),
@@ -227,7 +210,6 @@ fun MapScreen(
                         center = center,
                         radius = 20f
                     )
-                    // Contour
                     drawCircle(
                         color = color1,
                         center = center,
@@ -240,21 +222,15 @@ fun MapScreen(
     }
 }
 
-/**
- * Retourne deux couleurs pour le dégradé radial, selon la difficulté (tirée au hasard dans GameState) et l'état du nœud.
- */
 fun colorsForNode(nodeId: Int, state: NodeState): Pair<Color, Color> {
-    // Récupère la difficulté stockée dans GameState pour ce nœud
     val difficulty = GameState.nodeDifficulties[nodeId]
 
-    // Couleurs de base selon la difficulté
     val (base1, base2) = when (difficulty) {
-        "Facile" -> Color(0xFFA5D6A7) to Color(0xFF66BB6A)   // verts clairs
-        "Moyenne" -> Color(0xFFFFF59D) to Color(0xFFFFEE58) // jaunes
-        else -> Color(0xFFFFCDD2) to Color(0xFFFF5252)       // rouges (Difficile)
+        "Facile" -> Color(0xFFA5D6A7) to Color(0xFF66BB6A)  
+        "Moyenne" -> Color(0xFFFFF59D) to Color(0xFFFFEE58) 
+        else -> Color(0xFFFFCDD2) to Color(0xFFFF5252)     
     }
 
-    // Ajuster en fonction de l'état
     return when (state) {
         NodeState.LOCKED -> base1.copy(alpha = 0.3f) to base2.copy(alpha = 0.3f)
         NodeState.SKIPPED -> Color.DarkGray to Color.Black
@@ -263,11 +239,7 @@ fun colorsForNode(nodeId: Int, state: NodeState): Pair<Color, Color> {
     }
 }
 
-/**
- * Permet d'assombrir légèrement une couleur (multiplateforme).
- */
 fun Color.darken(factor: Float): Color {
-    // On diminue un peu les composantes RGB
     return Color(
         red = (red * (1f - factor)).coerceIn(0f, 1f),
         green = (green * (1f - factor)).coerceIn(0f, 1f),
@@ -276,9 +248,7 @@ fun Color.darken(factor: Float): Color {
     )
 }
 
-/**
- * Dessine une étoile (points branches) en se basant sur un Path.
- */
+
 fun DrawScope.drawStar(
     center: Offset,
     outerRadius: Float,
@@ -300,7 +270,6 @@ fun DrawScope.drawStar(
     drawPath(path, color, style = style)
 }
 
-/** Génère une couleur pastel aléatoire (utilisée pour les nébuleuses). */
 fun randomNebulaColor(): Color {
     val hue = Random.nextFloat() * 360f
     val saturation = 0.4f
@@ -308,7 +277,6 @@ fun randomNebulaColor(): Color {
     return Color.hsv(hue, saturation, brightness)
 }
 
-/** Positions naturelles pour 15 nœuds. */
 fun naturalNodePositions(): List<Pair<Float, Float>> = listOf(
     0.50f to 0.95f, // node 0
     0.15f to 0.88f, // node 1
@@ -327,7 +295,6 @@ fun naturalNodePositions(): List<Pair<Float, Float>> = listOf(
     0.50f to 0.10f  // node 14 (Boss)
 )
 
-/** Edges naturels pour la carte. */
 fun naturalEdges(): List<Pair<Int, Int>> = listOf(
     0 to 1,
     0 to 2,
