@@ -7,22 +7,20 @@ import com.worldline.quiz.data.DataRepository
 object GameState {
     var nodeStates = List(15) { if (it == 0) NodeState.AVAILABLE else NodeState.LOCKED }
 
-    // La difficulté de chaque nœud est générée aléatoirement, sauf pour le premier et le boss.
     var nodeDifficulties: List<String> = generateNodeDifficulties()
 
     var score = 0
     var collectedJokers = mutableListOf<JokerType>()
     var streakCount = 0
     var lastUnlockedJoker: JokerType? = null
-    var allowDoubleTap = false  // Pour gérer le Joker Double Tap
-    var currentNodeId = 0  // 🔥 Suivi du nœud actuel
+    var allowDoubleTap = false 
+    var currentNodeId = 0 
 
     private var currentQuestions = mutableMapOf<Int, Question>()
-    private var bossQuestionList = mutableListOf<Question>()  // Questions pour le boss
-    private var bossQuestionIndex = 0 // Suivi de la progression dans le combat du boss
+    private var bossQuestionList = mutableListOf<Question>() 
+    private var bossQuestionIndex = 0 
 
-    // 🎯 Thème sélectionné par le joueur
-    var selectedTheme: String = "Général"  // Définir un thème par défaut
+    var selectedTheme: String = "Général"  
 
     val diamondLayers = listOf(
         listOf(0),          // Layer 0
@@ -38,11 +36,7 @@ object GameState {
         generateQuestions()
     }
 
-    /**
-     * Génère aléatoirement la difficulté pour chaque nœud.
-     * Pour les nœuds 1 à 13, la difficulté est tirée au hasard parmi "Facile", "Moyenne" et "Difficile".
-     * Le premier nœud (0) sera toujours "Facile" et le boss (14) sera toujours "Difficile".
-     */
+   
     private fun generateNodeDifficulties(): List<String> {
         val difficulties = listOf("Facile", "Moyenne", "Difficile")
         return List(15) { index ->
@@ -54,9 +48,7 @@ object GameState {
         }
     }
 
-    /**
-     * Retourne la question pour le nœud donné en se basant sur la difficulté assignée à ce nœud et le thème sélectionné.
-     */
+  
     fun getQuestionForNode(nodeId: Int): Question {
         currentNodeId = nodeId  // 🔥 Mettre à jour le nœud actuel
         val difficulty = nodeDifficulties[nodeId]
@@ -70,9 +62,7 @@ object GameState {
     }
 
 
-    /**
-     * Génère les questions pour chaque nœud en fonction de la difficulté assignée et du thème sélectionné.
-     */
+   
     fun generateQuestions() {
         currentQuestions.clear()
         for (nodeId in nodeStates.indices) {
@@ -116,7 +106,7 @@ object GameState {
         score = 0
         collectedJokers.clear()
         lastUnlockedJoker = null
-        allowDoubleTap = false  // Réinitialisation du Double Tap
+        allowDoubleTap = false 
         streakCount = 0
         generateQuestions()
     }
@@ -125,13 +115,13 @@ object GameState {
         nodeStates = List(15) { if (it == 0) NodeState.AVAILABLE else NodeState.LOCKED }
         nodeDifficulties = generateNodeDifficulties()
         score = 0
-        allowDoubleTap = false  // Réinitialisation du Double Tap
+        allowDoubleTap = false  
         generateQuestions()
     }
 
     fun setTheme(theme: String) {
         selectedTheme = theme
-        generateQuestions() // 🔥 Regénérer les questions avec le nouveau thème
+        generateQuestions()
     }
 
     fun unlockRandomJoker() {
@@ -156,7 +146,7 @@ object GameState {
         when (joker) {
             JokerType.DOUBLE_TAP -> allowDoubleTap = true
             JokerType.SKIP -> {
-                val newQuestion = getRandomQuestion()  // ✅ Correction ici
+                val newQuestion = getRandomQuestion() 
                 bossQuestionList[bossQuestionIndex] = newQuestion
             }
             else -> {}
