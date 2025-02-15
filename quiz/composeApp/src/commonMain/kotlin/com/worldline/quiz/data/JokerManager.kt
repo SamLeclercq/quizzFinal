@@ -4,9 +4,7 @@ import com.worldline.quiz.core.GameState
 
 object JokerManager {
 
-    /**
-     * Applique l'effet du Joker sélectionné sur une question normale.
-     */
+   
     fun useJoker(
         joker: JokerType,
         question: Question,
@@ -27,15 +25,13 @@ object JokerManager {
                 }
             }
             JokerType.DOUBLE_TAP -> {
-                GameState.allowDoubleTap = true // ✅ Active le mode double tentative
+                GameState.allowDoubleTap = true
             }
         }
-        GameState.useJoker(joker)  // ✅ Supprime le Joker après utilisation
+        GameState.useJoker(joker) 
     }
 
-    /**
-     * Applique l'effet du Joker sélectionné sur une question de boss.
-     */
+ 
     fun useJokerForBoss(
         joker: JokerType,
         question: Question,
@@ -46,19 +42,16 @@ object JokerManager {
                 updateQuestion(removeTwoWrongAnswers(question))
             }
             JokerType.SKIP -> {
-                val newBossQuestion = GameState.getBossQuestion() // ✅ Suppression du paramètre inutile
+                val newBossQuestion = GameState.getBossQuestion() 
                 updateQuestion(newBossQuestion)
             }
             JokerType.DOUBLE_TAP -> {
                 GameState.allowDoubleTap = true
             }
         }
-        GameState.useJoker(joker)  // ✅ Supprime le Joker après utilisation
+        GameState.useJoker(joker)
     }
 
-    /**
-     * Retourne la description de l'effet du Joker.
-     */
     fun getJokerEffect(joker: JokerType): String {
         return when (joker) {
             JokerType.FIFTY_FIFTY -> "Supprime deux mauvaises réponses"
@@ -67,9 +60,6 @@ object JokerManager {
         }
     }
 
-    /**
-     * Retourne l'emoji correspondant au Joker.
-     */
     fun getJokerEmoji(joker: JokerType): String {
         return when (joker) {
             JokerType.FIFTY_FIFTY -> "❓"
@@ -78,9 +68,7 @@ object JokerManager {
         }
     }
 
-    /**
-     * Supprime deux mauvaises réponses aléatoires pour le Joker 50/50.
-     */
+  
     private fun removeTwoWrongAnswers(question: Question): Question {
         val incorrectAnswers = question.answers.filter { it.id != question.correctAnswerId }
             .shuffled()
