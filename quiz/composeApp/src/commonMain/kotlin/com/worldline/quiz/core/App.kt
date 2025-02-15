@@ -25,13 +25,11 @@ fun App() {
     val navController = rememberNavController()
     var showConfirmQuit by remember { mutableStateOf(false) }
 
-    // Obtenir la route actuelle
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
     MaterialTheme(colors = darkColors()) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // NavHost pour gérer la navigation
             NavHost(
                 navController = navController,
                 startDestination = "start",
@@ -116,7 +114,6 @@ fun App() {
                 }
             }
 
-            // Afficher la croix "Quitter" en haut à droite sauf si la route est "start"
             if (currentRoute != "start") {
                 IconButton(
                     onClick = { showConfirmQuit = true },
@@ -132,7 +129,6 @@ fun App() {
                 }
             }
 
-            // Boîte de dialogue de confirmation pour quitter
             if (showConfirmQuit) {
                 AlertDialog(
                     onDismissRequest = { showConfirmQuit = false },
